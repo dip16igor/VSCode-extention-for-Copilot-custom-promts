@@ -1,0 +1,78 @@
+{
+  "name": "copilot-prompts-launcher",
+  "displayName": "Copilot Prompts Launcher",
+  "description": "Quick launcher for custom Copilot prompts",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.102.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "copilot-prompts-launcher.showPrompts",
+        "title": "Show Copilot Prompts",
+        "category": "Copilot Prompts",
+        "icon": "$(copilot)"
+      },
+      {
+        "command": "copilot-prompts-launcher.savePrompt",
+        "title": "Save Selected Text as Copilot Prompt",
+        "category": "Copilot Prompts",
+        "icon": "$(add)"
+      },
+      {
+        "command": "copilot-prompts-launcher.deletePrompt",
+        "title": "Delete Copilot Prompt",
+        "category": "Copilot Prompts",
+        "icon": "$(trash)"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "copilot-prompts-launcher.showPrompts",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "copilot-prompts-launcher.savePrompt",
+          "when": "editorHasSelection",
+          "group": "9_cutcopypaste"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.102.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3",
+    "ts-loader": "^9.5.2",
+    "webpack": "^5.99.7",
+    "webpack-cli": "^6.0.1",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}

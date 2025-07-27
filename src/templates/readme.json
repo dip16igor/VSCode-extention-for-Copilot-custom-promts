@@ -1,0 +1,6 @@
+{
+    "id": "create-readme",
+    "name": "Create README Files",
+    "description": "Generate README.md and README.ru.md with cross-references",
+    "prompt": "Create two README files for this project:\n1. README.md in English\n2. README.ru.md in Russian\n\nRequirements:\n- Add cross-references between files\n- Include sections:\n  - Project description\n  - Installation\n  - Usage\n  - Contributing\n- Add language switcher\n- Maintain consistent structure"
+}
