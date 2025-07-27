@@ -25,12 +25,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 		if (selected) {
 			await vscode.env.clipboard.writeText(selected.prompt.prompt);
-			const editor = vscode.window.activeTextEditor;
-			if (editor) {
-				await editor.edit(editBuilder => {
-					editBuilder.insert(editor.selection.active, selected.prompt.prompt);
-				});
-			}
+			// Эта команда вставит текст в активный элемент, будь то редактор или поле ввода.
+			await vscode.commands.executeCommand('editor.action.clipboardPasteAction');
 		}
 	});
 
