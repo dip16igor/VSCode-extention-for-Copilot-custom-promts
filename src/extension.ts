@@ -31,14 +31,13 @@ export function activate(context: vscode.ExtensionContext) {
 			await vscode.env.clipboard.writeText(promptText);
 
 			try {
-				// Attempt to automatically focus the chat and paste the content.
 				await vscode.commands.executeCommand('workbench.view.chat.focus');
 
-				// Wait a moment for the UI to catch up and focus the input.
 				await new Promise(resolve => setTimeout(resolve, 150));
 
-				// Execute the generic paste command, which should target the now-focused chat input.
-				await vscode.commands.executeCommand('editor.action.clipboardPasteAction');
+				// Use the specific command to insert text into the chat input.
+				// This is more reliable than a generic paste and should keep the focus in the input field.
+				await vscode.commands.executeCommand('chat.action.insertIntoInput', { text: promptText });
 			} catch (error) {
 				// If any step fails, notify the user that the prompt is on the clipboard for manual pasting.
 				console.error('Failed to auto-paste prompt into chat. Falling back to clipboard notification.', error);
