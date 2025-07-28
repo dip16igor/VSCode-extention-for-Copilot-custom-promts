@@ -25,19 +25,20 @@ export function activate(context: vscode.ExtensionContext) {
 
 		if (selected) {
 			const promptText = selected.prompt.prompt;
-			try {
-				// A more robust, two-step approach:
-				// 1. Ensure the chat view is focused. This will throw if no chat is available.
-				await vscode.commands.executeCommand('workbench.view.chat.focus');
 
-				// 2. Insert the text into the chat input. This is more reliable than 'submit'.
-				await vscode.commands.executeCommand('chat.action.insertIntoInput', { text: promptText });
-			} catch (error) {
-				// Fallback for older VS Code versions or if a chat extension isn't active.
-				console.error('Failed to submit prompt to chat. Falling back to clipboard.', error);
-				await vscode.env.clipboard.writeText(promptText);
-				vscode.window.showInformationMessage('Prompt copied to clipboard. Paste it into the chat input.');
-			}
+			// The command to open the chat and pre-fill it with the prompt can sometimes fail silently
+			// if the chat view is not ready. A robust strategy is to execute it as a "fire-and-forget"
+			// enhancement, and immediately follow up with the guaranteed clipboard copy.
+
+			// We try the best-case scenario first: directly inserting into the chat.
+			vscode.commands.executeCommand('workbench.action.chat.open', { query: promptText });
+
+			// Immediately after, we perform the reliable fallback: copying to the clipboard.
+			// This ensures that in every case, the user has the prompt ready.
+			await vscode.env.clipboard.writeText(promptText);
+
+			// And we notify the user with a message that covers both scenarios.
+			vscode.window.showInformationMessage('Prompt sent to chat & copied to clipboard.');
 		}
 	});
 
