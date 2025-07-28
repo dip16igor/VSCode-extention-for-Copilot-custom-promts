@@ -26,19 +26,24 @@ export function activate(context: vscode.ExtensionContext) {
 		if (selected) {
 			const promptText = selected.prompt.prompt;
 
-			// The command to open the chat and pre-fill it with the prompt can sometimes fail silently
-			// if the chat view is not ready. A robust strategy is to execute it as a "fire-and-forget"
-			// enhancement, and immediately follow up with the guaranteed clipboard copy.
-
-			// We try the best-case scenario first: directly inserting into the chat.
-			vscode.commands.executeCommand('workbench.action.chat.open', { query: promptText });
-
-			// Immediately after, we perform the reliable fallback: copying to the clipboard.
-			// This ensures that in every case, the user has the prompt ready.
+			// First, place the text onto the clipboard. This is our reliable source for the paste action
+			// and serves as the fallback if automatic pasting fails.
 			await vscode.env.clipboard.writeText(promptText);
 
-			// And we notify the user with a message that covers both scenarios.
-			vscode.window.showInformationMessage('Prompt sent to chat & copied to clipboard.');
+			try {
+				// Attempt to automatically focus the chat and paste the content.
+				await vscode.commands.executeCommand('workbench.view.chat.focus');
+
+				// Wait a moment for the UI to catch up and focus the input.
+				await new Promise(resolve => setTimeout(resolve, 150));
+
+				// Execute the generic paste command, which should target the now-focused chat input.
+				await vscode.commands.executeCommand('editor.action.clipboardPasteAction');
+			} catch (error) {
+				// If any step fails, notify the user that the prompt is on the clipboard for manual pasting.
+				console.error('Failed to auto-paste prompt into chat. Falling back to clipboard notification.', error);
+				vscode.window.showInformationMessage('Prompt copied. Press Ctrl+V to paste.');
+			}
 		}
 	});
 

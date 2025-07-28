@@ -38,7 +38,14 @@
 					"group": "9_cutcopypaste@2"
 				}
 			]
-		}
+		},
+		"keybindings": [
+			{
+				"command": "copilot-prompts-launcher.showPrompts",
+				"key": "ctrl+alt+p",
+				"mac": "cmd+alt+p"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
