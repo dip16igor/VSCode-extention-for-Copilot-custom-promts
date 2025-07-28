@@ -24,10 +24,6 @@
 			{
 				"command": "copilot-prompts-launcher.savePrompt",
 				"title": "Prompts: Save Selection as Prompt"
-			},
-			{
-				"command": "copilot-prompts-launcher.deletePrompt",
-				"title": "Prompts: Delete a Prompt"
 			}
 		],
 		"menus": {
