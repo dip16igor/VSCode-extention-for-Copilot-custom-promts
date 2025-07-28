@@ -24,10 +24,20 @@ export function activate(context: vscode.ExtensionContext) {
 		);
 
 		if (selected) {
-			// The most reliable approach: copy to clipboard and notify the user.
-			// This avoids all focus-related race conditions.
-			await vscode.env.clipboard.writeText(selected.prompt.prompt);
-			vscode.window.showInformationMessage('Prompt copied. Press Ctrl+V to paste.');
+			const promptText = selected.prompt.prompt;
+			try {
+				// A more robust, two-step approach:
+				// 1. Ensure the chat view is focused. This will throw if no chat is available.
+				await vscode.commands.executeCommand('workbench.view.chat.focus');
+
+				// 2. Insert the text into the chat input. This is more reliable than 'submit'.
+				await vscode.commands.executeCommand('chat.action.insertIntoInput', { text: promptText });
+			} catch (error) {
+				// Fallback for older VS Code versions or if a chat extension isn't active.
+				console.error('Failed to submit prompt to chat. Falling back to clipboard.', error);
+				await vscode.env.clipboard.writeText(promptText);
+				vscode.window.showInformationMessage('Prompt copied to clipboard. Paste it into the chat input.');
+			}
 		}
 	});
 

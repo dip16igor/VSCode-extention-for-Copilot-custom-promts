@@ -1,105 +1,62 @@
 {
-  "name": "copilot-prompts-launcher",
-  "displayName": "Copilot Prompts Launcher",
-  "description": "Quick launcher for custom Copilot prompts",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.102.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onStartupFinished"
-  ],
-  "main": "./dist/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "copilot-prompts-launcher.showPrompts",
-        "title": "Insert Custom Prompt...",
-        "category": "Copilot Prompts",
-        "icon": "$(copilot)"
-      },
-      {
-        "command": "copilot-prompts-launcher.savePrompt",
-        "title": "Save Selection as Prompt...",
-        "category": "Copilot Prompts",
-        "icon": "$(add)"
-      },
-      {
-        "command": "copilot-prompts-launcher.deletePrompt",
-        "title": "Delete a Prompt...",
-        "category": "Copilot Prompts",
-        "icon": "$(trash)"
-      }
-    ],
-    "submenus": [
-      {
-        "id": "copilot-prompts-launcher.contextSubmenu",
-        "label": "Custom Prompts"
-      }
-    ],
-    "menus": {
-      "editor/context": [
-        {
-          "submenu": "copilot-prompts-launcher.contextSubmenu",
-          "group": "9_cutcopypaste@1",
-          "when": "editorTextFocus || inputFocus"
-        }
-      ],
-      "workbench.panel.chat.input.context": [
-        {
-          "submenu": "copilot-prompts-launcher.contextSubmenu",
-          "group": "9_cutcopypaste@1"
-        }
-      ],
-      "copilot-prompts-launcher.contextSubmenu": [
-        {
-          "command": "copilot-prompts-launcher.showPrompts",
-          "group": "1_insert"
-        },
-        {
-          "command": "copilot-prompts-launcher.savePrompt",
-          "when": "editorHasSelection",
-          "group": "2_manage"
-        },
-        {
-          "command": "copilot-prompts-launcher.deletePrompt",
-          "group": "2_manage"
-        }
-      ],
-      "editor/title": [
-        {
-          "command": "copilot-prompts-launcher.showPrompts",
-          "group": "navigation"
-        }
-      ]
-    }
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
-    "lint": "eslint src",
-    "test": "vscode-test"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.102.0",
-    "@types/mocha": "^10.0.10",
-    "@types/node": "20.x",
-    "@typescript-eslint/eslint-plugin": "^8.31.1",
-    "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
-    "typescript": "^5.8.3",
-    "ts-loader": "^9.5.2",
-    "webpack": "^5.99.7",
-    "webpack-cli": "^6.0.1",
-    "@vscode/test-cli": "^0.0.11",
-    "@vscode/test-electron": "^2.5.2"
-  }
+	"name": "copilot-prompts-launcher",
+	"displayName": "Copilot & Gemini Prompts Launcher",
+	"description": "Easily save, manage, and use custom prompts for AI assistants like GitHub Copilot and Google Gemini in VS Code.",
+	"version": "0.1.0",
+	"publisher": "your-publisher-name",
+	"engines": {
+		"vscode": "^1.80.0"
+	},
+	"categories": [
+		"Other",
+		"AI"
+	],
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "copilot-prompts-launcher.showPrompts",
+				"title": "Prompts: Show & Use Prompt"
+			},
+			{
+				"command": "copilot-prompts-launcher.savePrompt",
+				"title": "Prompts: Save Selection as Prompt"
+			},
+			{
+				"command": "copilot-prompts-launcher.deletePrompt",
+				"title": "Prompts: Delete a Prompt"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"when": "editorHasSelection",
+					"command": "copilot-prompts-launcher.savePrompt",
+					"group": "9_cutcopypaste@2"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.80.0",
+		"@types/glob": "^8.1.0",
+		"@types/mocha": "^10.0.1",
+		"@types/node": "20.2.5",
+		"eslint": "^8.41.0",
+		"glob": "^8.1.0",
+		"mocha": "^10.2.0",
+		"typescript": "^5.1.3",
+		"@vscode/test-electron": "^2.3.2"
+	}
 }
