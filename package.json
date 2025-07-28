@@ -17,35 +17,62 @@
     "commands": [
       {
         "command": "copilot-prompts-launcher.showPrompts",
-        "title": "Show Copilot Prompts",
+        "title": "Insert Custom Prompt...",
         "category": "Copilot Prompts",
         "icon": "$(copilot)"
       },
       {
         "command": "copilot-prompts-launcher.savePrompt",
-        "title": "Save Selected Text as Copilot Prompt",
+        "title": "Save Selection as Prompt...",
         "category": "Copilot Prompts",
         "icon": "$(add)"
       },
       {
         "command": "copilot-prompts-launcher.deletePrompt",
-        "title": "Delete Copilot Prompt",
+        "title": "Delete a Prompt...",
         "category": "Copilot Prompts",
         "icon": "$(trash)"
       }
     ],
+    "submenus": [
+      {
+        "id": "copilot-prompts-launcher.contextSubmenu",
+        "label": "Custom Prompts"
+      }
+    ],
     "menus": {
+      "editor/context": [
+        {
+          "submenu": "copilot-prompts-launcher.contextSubmenu",
+          "group": "9_cutcopypaste@1",
+          "when": "editorTextFocus || inputFocus"
+        }
+      ],
+      "workbench.panel.chat.input.context": [
+        {
+          "submenu": "copilot-prompts-launcher.contextSubmenu",
+          "group": "9_cutcopypaste@1"
+        }
+      ],
+      "copilot-prompts-launcher.contextSubmenu": [
+        {
+          "command": "copilot-prompts-launcher.showPrompts",
+          "group": "1_insert"
+        },
+        {
+          "command": "copilot-prompts-launcher.savePrompt",
+          "when": "editorHasSelection",
+          "group": "2_manage"
+        },
+        {
+          "command": "copilot-prompts-launcher.deletePrompt",
+          "group": "2_manage"
+        }
+      ],
       "editor/title": [
         {
           "command": "copilot-prompts-launcher.showPrompts",
           "group": "navigation"
-        }
-      ],
-      "editor/context": [
-        {
-          "command": "copilot-prompts-launcher.savePrompt",
-          "when": "editorHasSelection",
-          "group": "9_cutcopypaste"
         }
       ]
     }
