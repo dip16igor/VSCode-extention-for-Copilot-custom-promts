@@ -1,58 +1,47 @@
-# Copilot Prompts Launcher
+# Copilot & Gemini Prompts Launcher
 
-Visual Studio Code extension that adds quick access to your custom GitHub Copilot prompts.
+A simple VS Code extension to easily save, manage, and use custom prompts for AI assistants like GitHub Copilot and Google Gemini. Stop re-typing the same complex instructions and access your favorite prompts with a single hotkey.
+
+Current Version: 0.1.0
 
 ## Features
 
-- Store and manage your frequently used Copilot prompts
-- Quick access via status bar button
-- Context menu integration
-- Save selected text as a new prompt
-- Global storage of prompts across workspaces
+- **Save Prompts from Selection**: Highlight any text in your editor, right-click, and save it as a reusable prompt.
+- **Quick Access**: Bring up your list of prompts instantly using a status bar button or a configurable hotkey (`Ctrl+Alt+P` / `Cmd+Alt+P`).
+- **Seamless Integration**: Automatically pastes the selected prompt into the active AI chat window (works with Gemini, Copilot Chat, and others).
+- **Clipboard Fallback**: If automatic pasting isn't possible, the prompt is copied to your clipboard for a quick `Ctrl+V`.
+- **Full Prompt Management**: Easily edit or delete prompts directly from the quick pick menu.
 
-## Usage
+## How to Use
 
-1. **Access Prompts**:
-   - Click the Copilot Prompts button in the status bar
-   - Use the command palette and type "Show Copilot Prompts"
+### Saving a New Prompt
 
-2. **Save a New Prompt**:
-   - Select text in the editor
-   - Right-click and choose "Save Selected Text as Copilot Prompt"
-   - Enter a name and description for the prompt
+1.  Select any block of text in the editor that you want to save as a prompt.
+2.  Right-click on the selection.
+3.  Choose **"Prompts: Save Selection as Prompt"** from the context menu.
+4.  Enter a short, descriptive name for your prompt.
+5.  (Optional) Enter a longer description.
 
-3. **Delete a Prompt**:
-   - Use the command palette and type "Delete Copilot Prompt"
-   - Select the prompt you want to delete
+ <!-- It's recommended to add a GIF here -->
 
-## Commands
+### Using a Saved Prompt
 
-- `Copilot Prompts: Show Prompts` - Display the list of saved prompts
-- `Copilot Prompts: Save Selected Text as Prompt` - Save selected text as a new prompt
-- `Copilot Prompts: Delete Prompt` - Delete an existing prompt
+1.  Press `Ctrl+Alt+P` (or `Cmd+Alt+P` on macOS).
+    - _Alternatively_, click the **"$(copilot) Prompts"** button in the status bar.
+2.  A list of your saved prompts will appear.
+3.  Select the prompt you want to use.
+4.  The prompt text will be automatically inserted into your active AI chat window.
 
-## Requirements
+ <!-- It's recommended to add a GIF here -->
 
-- Visual Studio Code 1.85.0 or higher
-- GitHub Copilot extension installed
+### Editing or Deleting a Prompt
 
-## Extension Settings
+1.  Open the prompt list (`Ctrl+Alt+P`).
+2.  Hover over the prompt you want to manage.
+3.  Click the **pencil icon** (`$(edit)`) to edit or the **trash icon** (`$(trash)`) to delete.
 
-Currently, this extension has no configurable settings.
+## Installation
 
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
-
-## Release Notes
-
-### 0.0.1
-
-Initial release:
-- Basic prompt management
-- Status bar integration
-- Context menu integration
+1.  Run the `vsce package` command in the project root to create a `.vsix` file.
+2.  In VS Code, open the Command Palette (`Ctrl+Shift+P`) and select **"Extensions: Install from VSIX..."**.
+3.  Choose the generated `.vsix` file.
