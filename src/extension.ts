@@ -19,6 +19,10 @@ export function activate(context: vscode.ExtensionContext) {
 		quickPick.matchOnDescription = true;
 		quickPick.matchOnDetail = true;
 
+		const editButton: vscode.QuickInputButton = {
+			iconPath: new vscode.ThemeIcon('edit'),
+			tooltip: 'Edit Prompt'
+		};
 		const trashButton: vscode.QuickInputButton = {
 			iconPath: new vscode.ThemeIcon('trash'),
 			tooltip: 'Delete Prompt'
@@ -26,12 +30,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const updateItems = () => {
 			const prompts = promptsManager.getPrompts();
-			quickPick.items = prompts.map(prompt => ({
+			quickPick.items = prompts.map((prompt: PromptTemplate) => ({
 				label: prompt.name,
 				description: prompt.description,
 				detail: prompt.prompt.slice(0, 100) + '...',
 				prompt: prompt,
-				buttons: [trashButton]
+				buttons: [editButton, trashButton]
 			}));
 		};
 
@@ -39,15 +43,49 @@ export function activate(context: vscode.ExtensionContext) {
 
 		quickPick.onDidTriggerItemButton(async (e) => {
 			if (e.item.prompt) {
-				const confirm = await vscode.window.showWarningMessage(
-					`Are you sure you want to delete the prompt "${e.item.prompt.name}"?`,
-					{ modal: true },
-					'Delete'
-				);
-				if (confirm === 'Delete') {
-					promptsManager.deletePrompt(e.item.prompt.id);
-					vscode.window.showInformationMessage(`Prompt "${e.item.prompt.name}" deleted.`);
-					updateItems(); // Refresh the list
+				const selectedPrompt = e.item.prompt;
+
+				if (e.button.tooltip === 'Delete Prompt') {
+					const confirm = await vscode.window.showWarningMessage(
+						`Are you sure you want to delete the prompt "${selectedPrompt.name}"?`,
+						{ modal: true },
+						'Delete'
+					);
+					if (confirm === 'Delete') {
+						promptsManager.deletePrompt(selectedPrompt.id);
+						vscode.window.showInformationMessage(`Prompt "${selectedPrompt.name}" deleted.`);
+						updateItems(); // Refresh the list
+					}
+				} else if (e.button.tooltip === 'Edit Prompt') {
+					quickPick.hide();
+
+					const newName = await vscode.window.showInputBox({
+						prompt: 'Enter the new name for the prompt',
+						value: selectedPrompt.name
+					});
+					if (newName === undefined) { return; } // User cancelled
+
+					const newDescription = await vscode.window.showInputBox({
+						prompt: 'Enter the new description',
+						value: selectedPrompt.description
+					});
+					if (newDescription === undefined) { return; }
+
+					const newPromptText = await vscode.window.showInputBox({
+						prompt: 'Enter the new prompt text',
+						value: selectedPrompt.prompt
+					});
+					if (newPromptText === undefined) { return; }
+
+					const updatedPrompt: PromptTemplate = {
+						...selectedPrompt,
+						name: newName,
+						description: newDescription,
+						prompt: newPromptText
+					};
+
+					promptsManager.savePrompt(updatedPrompt);
+					vscode.window.showInformationMessage(`Prompt "${newName}" updated successfully.`);
 				}
 			}
 		});
