@@ -24,9 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
 		);
 
 		if (selected) {
+			// The most reliable approach: copy to clipboard and notify the user.
+			// This avoids all focus-related race conditions.
 			await vscode.env.clipboard.writeText(selected.prompt.prompt);
-			// Эта команда вставит текст в активный элемент, будь то редактор или поле ввода.
-			await vscode.commands.executeCommand('editor.action.clipboardPasteAction');
+			vscode.window.showInformationMessage('Prompt copied. Press Ctrl+V to paste.');
 		}
 	});
 
